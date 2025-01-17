@@ -3,38 +3,48 @@
 
 using namespace std;  
 
-const int width = 20, height = 10; // Размеры поля
+enum chip // здесь лежат все варианты фишек
+{
+	RED,
+	YELLOW,
+	GREEN,
+	BLUE,
+	VIOLET
+};
 
-char pole[height][width]; // Двумерный массив с полем
+const char width = 20, height = 10; // Размеры поля
 
-int fishka(){
-  random_device rd; 
-  mt19937 gen(rd()); 
-  uniform_int_distribution<> dist(1, 6); 
-  return dist(gen);
+char field[height][width]; // Двумерный массив с полем
+
+chip fishka(){
+	chip this_chip = random(0, 4);
+	return this_chip;
 }
 
-void zapolnenie_polya() { 
-    for (int i = 0; i < height; i++) 
-        fill(pole[i], pole[i] + width, '0'); 
+void field_filling(){ 
+    for (char i = 0; i < height; i++) 
+        fill(field[i], field[i] + width, '0'); 
 } 
 
 void draw(){
-  cout << " "; 
-  for (int i = 0; i < width; i++) cout << "_"; 
-  cout << "\n"; 
-  for (int i = 0; i < height; i++) { 
-      cout << "|"; 
-      for (int j = 0; j < width; j++){cout << pole[i][j];} 
-      cout << "|\n"; 
-  }  
-  cout << " ";
-  for (int i = 0; i < width; i++) cout << "‾"; 
-  cout << "\n"; 
+	cout << " "; 
+  	for (char i = 0; i < width; i++)
+		cout << "_"; 
+	cout << "\n"; 
+	for (char i = 0; i < height; i++) { 
+		cout << "|"; 
+		for (char j = 0; j < width; j++)
+			cout << field[i][j];
+		cout << "|\n"; 
+	}  
+	cout << " ";
+	for (char i = 0; i < width; i++)
+		cout << "‾"; 
+	cout << "\n"; 
 }
 
 int main(){
-  cout << "Hello world" << "\n";
-  zapolnenie_polya();
-  draw();
+	cout << "Hello world\n";
+	field_filling();
+	draw();
 }
