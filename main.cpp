@@ -40,7 +40,7 @@ void field_filling(){
 } 
 
 void draw(){
-	cout << ' ';
+	cout << "  ";
 	for (char i = 0; i < width; i++)
 		cout << "_";
 	cout << "\n"; 
