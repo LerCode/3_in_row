@@ -17,7 +17,7 @@ class Field
 {	
 private:
 	const unsigned char width, height;
-	Chip field[height][width];
+	Chip field[][];
 	Chip make_chip();
 public:
 	Field(unsigned char, unsigned char);
@@ -45,7 +45,8 @@ Chip Field::make_chip()
 }
 
 Field::Field(const unsigned char width_in, const unsigned char height_in): width{width_in}, height{height_in}
-{ 
+{
+	field[height][width]
     for (char y = 0; y < height; y++) 
         for (char x = 0; x < width; x++)
 			field[y][x] = make_chip();
