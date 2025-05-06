@@ -1,8 +1,9 @@
 #include <iostream> 
 
-using namespace std;  
+enum class Chip;
+class Field;
 
-enum chip // здесь лежат все варианты фишек
+enum class Chip // Здесь лежат все варианты фишек
 {
 	RED = '*',
 	ORANGE = '$',
@@ -12,55 +13,73 @@ enum chip // здесь лежат все варианты фишек
 	VIOLET = '@'
 };
 
-const char width = 20, height = 10;
-chip field[height][width];
+class Field
+{	
+private:
+	const unsigned char width, height;
+	Chip field[height][width];
+	Chip make_chip();
+public:
+	Field(unsigned char, unsigned char);
+	void draw() const;
+};
 
-chip make_chip(){
+Chip Field::make_chip()
+{
 	char this_chip = rand() % 6;
 	switch (this_chip)
 	{
 		case 0:
-			return RED;
+			return Chip::RED;
 		case 1:
-			return ORANGE;
+			return Chip::ORANGE;
 		case 2:
-			return YELLOW;
+			return Chip::YELLOW;
 		case 3:
-			return GREEN;
+			return Chip::GREEN;
 		case 4:
-			return BLUE;
+			return Chip::BLUE;
+		default:
+			return Chip::VIOLET;
 	}
-	return VIOLET;
 }
 
-void field_filling(){ 
+Field::Field(const unsigned char width_in, const unsigned char height_in): width{width_in}, height{height_in}
+{ 
     for (char y = 0; y < height; y++) 
         for (char x = 0; x < width; x++)
 			field[y][x] = make_chip();
 } 
 
-void draw(){
-	cout << "  ";
+void Field::draw() const
+{
+	std::cout << "  ";
 	for (char i = 0; i < width; i++)
-		cout << "_";
-	cout << "\n"; 
-	for (char i = 0; i < height; i++) { 
+		std::cout << "_";
+	std::cout << "\n"; 
+
+	for (char i = 0; i < height; i++)
+	{ 
 		printf("%d%c", i, '|');
 		for (char j = 0; j < width; j++)
-			cout << static_cast<char>(field[i][j]);
-		cout << "|\n"; 
-	}  
-	cout << "  ";
+			std::cout << static_cast<char>(field[i][j]);
+		std::cout << "|\n"; 
+	}
+
+	std::cout << "  ";
 	for (char i = 0; i < width; i++)
-		cout << "‾"; 
-	cout << "\n  "; 
+		std::cout << "‾"; 
+	std::cout << "\n  ";
+
   	for (char i = 0; i < width; i++)
-		cout << static_cast<char>(i + 'a'); 
-	cout << "\n"; 
+		std::cout << static_cast<char>(i + 'a'); 
+	std::cout << "\n"; 
 }
 
-int main(){
-	cout << "Hello world\n";
-	field_filling();
-	draw();
+int main()
+{
+	unsigned char height, weight;
+	std::cin >> height >> weight;
+	Field field{height, weight};
+	return 0;
 }
