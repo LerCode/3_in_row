@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+//#include <chrono>
 
 enum class Chip;
 class Field;
@@ -11,11 +12,12 @@ enum class Chip // Все цвета фишек
 	YELLOW = '&',
 	GREEN = '#',
 	BLUE = '0',
-	VIOLET = '@'
+	VIOLET = '@',
+	VOID = ' ' // Если поле пустое
 };
 
 class Field
-{	
+{
 private:
 	const unsigned short height, width;
 	Chip** field;
@@ -28,8 +30,7 @@ public:
 
 Chip Field::make_chip() const
 {
-	char this_chip = rand() % 6;
-	switch (this_chip)
+	switch (std::rand() % 6)
 	{
 		case 0:
 			return Chip::RED;
@@ -41,7 +42,7 @@ Chip Field::make_chip() const
 			return Chip::GREEN;
 		case 4:
 			return Chip::BLUE;
-		default:
+		case 5:
 			return Chip::VIOLET;
 	}
 }
@@ -49,13 +50,13 @@ Chip Field::make_chip() const
 Field::Field(const unsigned short height_in, const unsigned short width_in): height{height_in}, width{width_in}
 {
 	field = new Chip*[height];
-	for (unsigned short y = 0u; y < height; y++)
-		field[y] = new Chip[width];
-	// Инициализировали поле
+	std::srand(std::time(nullptr)); // Для генерации случайных фишек по времени
     for (unsigned short y = 0u; y < height; y++) 
+	{
+		field[y] = new Chip[width];
         for (unsigned short x = 0u; x < width; x++)
 			field[y][x] = make_chip();
-	// Заполнили поле случайными фишками
+	} // Заполнили поле случайными фишками
 }
 
 Field::~Field()
@@ -67,26 +68,27 @@ Field::~Field()
 
 void Field::draw() const
 {
+	unsigned short x, y;
 	std::cout << "   ";
-	for (unsigned short i = 0u; i < width; i++) // Верхние границы
+	for (y = 0u; y < width; y++) // Верхние границы
 		std::cout << "_";
 	std::cout << "\n"; 
 
-	for (unsigned short y = 0u; y < height; y++)
+	for (y = 0u; y < height; y++)
 	{ 
 		std::cout << std::setw(2) << y << '|';
-		for (unsigned short x = 0u; x < width; x++)
+		for (x = 0u; x < width; x++)
 			std::cout << static_cast<char>(field[y][x]); // Вывод фишек
 		std::cout << "|\n"; 
 	}
 
 	std::cout << "   ";
-	for (unsigned short i = 0u; i < width; i++) // Нижние раницы
+	for (y = 0u; y < width; y++) // Нижние раницы
 		std::cout << "‾"; 
 	std::cout << "\n   ";
 
-  	for (unsigned char i = 0u; i < width; i++) // Буковки снизу для столбцов
-		std::cout << static_cast<char>(i + 'a'); 
+  	for (y = 0u; y < width; y++) // Буковки снизу для столбцов
+		std::cout << static_cast<char> (y + 'a'); 
 	std::cout << "\n";
 }
 
@@ -95,7 +97,7 @@ int main()
 	unsigned short height, width;
 	std::cout << "Input height of field: "; std::cin >> height;
 	std::cout << "Input wight of field: "; std::cin >> width;
-	Field field{height, width};
+	Field field {height, width};
 	field.draw();
 	return 0;
 }
